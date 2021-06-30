@@ -11,6 +11,14 @@
 	if(($action == 'check') && !isset($_GET['doc'])) {
 		checkWrongDoc();
 	}
+	/*Условие выполнения скачивания документа конкретной версии*/
+	if(isset($_GET['version'])) {
+		downloadDocVersion();
+	}
+	/*Условия выполнения скачивания index.json документа с корректными данными документов*/
+	if (isset($_GET['doc']) && ($_GET['action'] == 'check')) {
+		downloadWrongJson();
+	}
 	/*Условия изменения отображаемого контента на странице*/
  	if($_SERVER['REQUEST_URI'] == '/web/index.php' || $_SERVER['REQUEST_URI'] == '/web/index.php?action=check') {
  		require("{$pathAsset}listDocs.php");

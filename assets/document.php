@@ -3,14 +3,6 @@
 	$json = file_get_contents("../docs/{$doc}/index.json");
 	$data = json_decode($json, true);
 	$count = count($data['versions']);
-	/*Условие выполнения скачивания документа конкретной версии*/
-	if(isset($_GET['version'])) {
-		downloadDocVersion();
-	}
-	/*Условия выполнения скачивания index.json документа с корректными данными документов*/
-	if (isset($_GET['doc']) && ($_GET['action'] == 'check')) {
-		downloadWrongJson();
-	}
 ?>
 <!DOCTYPE html>
 <html>
