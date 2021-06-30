@@ -1,0 +1,142 @@
+.title{
+	text-align: center;
+	font-family: "Andale Mono", monospace;
+	color: #454545;
+}
+.underTitle{
+	font-family: "Andale Mono", monospace;
+	padding-left: 12px;
+	display: block;
+	color: #454545;
+}
+.container{
+	max-width: 1250px;
+	margin: 0 auto;
+	padding: 0px 15px;
+}
+.col-sm{
+	display: inline-block;
+	min-width: 576px;
+	max-width: 580px;
+	margin: 0 auto;
+}
+.col-lg{
+	display: block;
+	min-width: 960px;
+	max-width: 960px;
+	margin: 0 auto;
+}
+.docLink{
+	text-decoration: none;
+	font-size: 18px;
+	color: #ff6969;
+}
+.docLink:hover{
+	color: #fc4242;
+	transition: 0.4s;
+}
+.documents{
+	list-style-type: none;
+	padding: 0;
+}
+.content{
+	float: left;
+	clear: left;
+	padding-left: 12px;
+}
+.list{
+	padding-bottom: 12px;
+}
+.underTitle h3{
+	font-size: 23px;
+}
+.tableUpd{
+	padding-left: 12px;
+}
+.colorTr{
+	background-color: #e0e0e0;
+}
+.sizeFont{
+	font-size: 11px;
+}
+.colorA{
+	color: #454545;
+}
+table{
+	width: 100%;
+	font-family: "FreeMono", monospace;
+	color: #454545;
+	border-spacing: 0 0;
+}
+th{
+	text-align: left;
+	padding: 10px;
+}
+td{
+	padding: 10px;
+}
+.docFontSize{
+	font-size: 16px;
+}
+.dowloadLink{
+	color: #454545;
+}
+.dowloadLink:hover{
+	color: #fc4242;
+	transition: 0.4s;
+}
+body, html {
+	padding: 0;
+	margin: 0;
+}
+header {
+	width: 100%;
+	height: 70px;
+	padding: 10px 0;
+	background: #F5F5F5;
+	box-shadow: 0 2px 14px rgba(0, 0, 0, 0.09);
+	background-size: cover;
+}
+#headerInside {
+	width: 960px;
+	margin: 0 auto;
+	height: 70px;
+}
+#companyName{
+	font-family: "Andale Mono", monospace;
+	color: #fc4242;
+	font-size: 19px;
+	padding: 12px;
+	width: 220px;
+	position: absolute;
+    display: inline-block;
+    vertical-align: middle;
+}
+#returnBack{
+	float: right;
+	font-family: "Andale Mono", monospace;
+	font-size: 18px;
+	padding: 23px 12px 23px 12px;
+	width: 70px;
+    display: inline-block;
+    vertical-align: middle;
+}
+.naw{
+	text-decoration: none;
+	color: #fc4242;
+}
+.naw:hover{
+	color: #ff8c8c;
+}
+#name{
+	text-decoration: none;
+	color: #fc4242;
+}
+#logo{
+	margin-left: 12px;
+	width: 68px;
+	height: 68px;
+	float: left;
+	background: url('../assets/origami-logo.svg') no-repeat;
+	background-size: contain;
+}
