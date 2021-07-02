@@ -1,6 +1,6 @@
 <?php
-	/*Try Catch на предмет отсутствия файла с конфигурациями*/
 	class ConfigFileNotFoundException extends Exception {}
+	/*Try Catch на предмет отсутствия файла с конфигурациями*/
 	try {
 	    $config_file_path = "../assets/config.php";
 	    if (!file_exists($config_file_path))
