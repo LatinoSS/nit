@@ -1,10 +1,7 @@
 <?php
 	$docs = $_GET['document'];
-	$count = count($docs);
-	for ($i=0; $i < $count; $i++) {
+	foreach ($docs as $key => $value) {
 		?>
-		<div><a href="?doc=<?= $docs[$i] ?>&action=check">Проблема в файле <?= $docs[$i] ?></a></div> <?php
+		<div><a href="?doc=<?= $value ?>&action=check">Проблема в файле <?= $value ?></a></div> <?php
 	}
 ?>
-
-

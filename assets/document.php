@@ -1,6 +1,6 @@
 <?php
 	$doc = $_GET['doc'];
-	$json = file_get_contents("../docs/{$doc}/index.json");
+	$json = file_get_contents("{$pathDocs}{$doc}/index.json");
 	$data = json_decode($json, true);
 	$count = count($data['versions']);
 ?>
@@ -33,7 +33,6 @@
 	    	<div class="tableUpd">
 	    		<table>
 					<tr class="colorTr">
-				    	<th class="th">Версия</th>
 				    	<th>Название файла</th>
 				    	<th>Размер(байт)</th>
 				    	<th>Контрольная сумма(хэш) md5</th>
@@ -42,8 +41,7 @@
 				 	<?php
 				 		for ($i=0; $i < $count; $i++) { ?>
 				 			<tr>
-						    	<td><?= $data['versions'][$i]['Version'] ?></td>
-						    	<td><a href="?doc=<?= $doc ?>&version=<?= $data['versions'][$i]['Version'] ?>" class="dowloadLink"><?= $data['versions'][$i]['FileName'] ?></a></td>
+						    	<td><a href="?doc=<?= $doc ?>&filename=<?= $data['versions'][$i]['FileName'] ?>" class="dowloadLink"><?= $data['versions'][$i]['FileName'] ?></a></td>
 						    	<td><?= $data['versions'][$i]['Size'] ?></td>
 						    	<td><?= $data['versions'][$i]['Md5'] ?></td>
 						    	<td><?= $data['versions'][$i]['Data'] ?></td>

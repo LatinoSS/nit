@@ -15,10 +15,10 @@
 			<div class="content">
 				<table class="documents">
 					<?php
-						$jsonF = file_get_contents("../docs/index.json");
+						$jsonF = file_get_contents("{$pathDocs}index.json");
 						$dataF = json_decode($jsonF, true);
 						foreach ($dataF as $value) {
-							$jsonN = file_get_contents("../docs/{$value}/index.json");
+							$jsonN = file_get_contents("{$pathDocs}{$value}/index.json");
 							$dataN = json_decode($jsonN, true);
 							$name = $dataN['Title'];
 							?>

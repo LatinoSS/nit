@@ -1,23 +1,36 @@
 <?php
 	/*Функция скачивания документа конкретной версии*/
 	function downloadDocVersion(){
+		require('../assets/config.php');
 		$doc = $_GET['doc'];
-		$json = file_get_contents("../docs/{$doc}/index.json");
+		$json = file_get_contents("{$pathDocs}{$doc}/index.json");
 		$data = json_decode($json, true);
-		$version = $_GET['version'];
-		$version = $version - 1;
-		$request = "{$data['versions'][$version]['FileName']}";
-		$file = "../docs/{$doc}/{$data['versions'][$version]['FileName']}";
-		header('Content-Type: application/octet-stream');
-		header("Content-Disposition: attachment; filename={$request}");
+		$filename = $_GET['filename'];
+		$file = "{$pathDocs}{$doc}/{$filename}";
+		header('Content-Type: application/pdf');
+		header("Content-Disposition: attachment; filename={$filename}");
 		readfile($file);
 	}
-	/*Функция скачивания index.json документа с корректными данными документов*/
+	/*Функция ищет все pdf файлы по заданной папке*/
+	function checkExistDocs(string $value){
+		require('../assets/config.php');
+		$directory = "{$pathDocs}{$value}";
+		$files = scandir($directory);
+		$pdf = ".pdf";
+		foreach ($files as $filename) {
+			$pos = strpos($filename, $pdf);
+			if ($pos !== false) {
+				$arrayFileName[] = $filename;
+			}
+		}
+		return $arrayFileName;
+	}
+	/*Функция ищет все pdf файлы по заданной папке и делает по ним index.json с их параметрами.*/
 	function downloadWrongJson(){
+		require('../assets/config.php');
 		$doc = $_GET['doc'];
-		$json = file_get_contents("../docs/{$doc}/index.json");
+		$json = file_get_contents("{$pathDocs}{$doc}/index.json");
 		$data = json_decode($json, true);
-		$count = count($data['versions']);
 		$fname = "index.json";
 		$text = "{
 	\"Title\": \"{$data[Title]}\",
@@ -25,42 +38,43 @@
   	\"versions\": [ \n";
   		$fileCreate = tmpfile();
 		$fileCreate_path = stream_get_meta_data($fileCreate)['uri'];
+  		$arrayName = checkExistDocs($doc); //Поиск всех pdf файлов в заданой папке
+  		$count = count($arrayName);
 		for ($i=0; $i < $count; $i++) {
-			$filename = "../docs/{$doc}/{$data['versions'][$i]['FileName']}";
+			$filename = "{$pathDocs}{$doc}/{$arrayName[$i]}";
 			$md5 = md5_file($filename);
 			$size = filesize($filename);
+			$filedata = date("d.m.y", filectime($filename));
 			$text = $text . "		{
-			\"Version\": {$data['versions'][$i]['Version']},
-			\"FileName\": \"{$data['versions'][$i]['FileName']}\",
+			\"FileName\": \"{$arrayName[$i]}\",
 			\"Size\": {$size},
 			\"Md5\": \"{$md5}\",
-			\"Data\": \"{$data['versions'][$i]['Data']}\"
+			\"Data\": \"{$filedata}\"
 		},\n";
 		}
 		$text = substr($text,0,-2);
 		$text = $text . "
 	]
 }";
-		fwrite($fileCreate, $text);
-		header('Content-Type: application/octet-stream');
+		header('Content-Type: text/json');
 		header("Content-Disposition: attachment; filename={$fname}");
 		ob_end_clean();
+		echo "$text";
 		readfile($fileCreate_path);
 		fclose($fileCreate);
 		exit();
 	}
 	/*Функция скачивания документов на главной странице*/
 	function downloadMainDoc(){
+		require('../assets/config.php');
 		$doc = $_GET['doc'];
 		$action = $_GET['action'];
-		$json = file_get_contents("../docs/{$doc}/index.json");
+		$json = file_get_contents("{$pathDocs}{$doc}/index.json");
 		$data = json_decode($json, true);
 		$count = count($data['versions']);
-		for ($i=0; $i < $count; $i++) {
-			$request = "{$data['versions'][$i]['FileName']}";
-			$file = "../docs/{$doc}/{$data['versions'][$i]['FileName']}";
-		}
-		header('Content-Type: application/octet-stream');
+		$request = "{$data['versions'][$count-1]['FileName']}";
+		$file = "{$pathDocs}{$doc}/{$request}";
+		header('Content-Type: application/pdf');
 		header("Content-Disposition: attachment; filename={$request}");
 		readfile($file);
 	}
@@ -68,24 +82,59 @@
 	/*Если расхождений нет, то откывается alert с соответствующим текстом*/
 	/*Если расхождения есть, то откывается страница с проблемными документами, можно скачать коррекные данные*/
 	function checkWrongDoc(){
+		require('../assets/config.php');
 		$flag = true;
-		$json = file_get_contents("../docs/index.json");
+		$json = file_get_contents("{$pathDocs}index.json");
 		$data = json_decode($json, true);
-		$countFolder = count($data);
 		$array = array();
-		for ($i=0; $i < $countFolder; $i++) {
-			$jsonDoc = file_get_contents("../docs/{$data[$i]}/index.json");
+		foreach ($data as $key => $value) {
+			$jsonDoc = file_get_contents("{$pathDocs}{$value}/index.json");
 			$dataDoc = json_decode($jsonDoc, true);
 			$countDoc = count($dataDoc['versions']);
 			for ($j=0; $j < $countDoc; $j++) {
-				$filename = "../docs/{$data[$i]}/{$dataDoc['versions'][$j]['FileName']}";
+				$filename = "{$pathDocs}{$value}/{$dataDoc['versions'][$j]['FileName']}";
 				$md5 = md5_file($filename);
 				$size =filesize($filename);
 				if ($md5 != $dataDoc['versions'][$j]['Md5'] || $size != $dataDoc['versions'][$j]['Size']) {
 					$flag = false;
-					if (!in_array($data[$i], $array)) {
-						$array[] = $data[$i];
+					if (!in_array($value, $array)) {
+						$array[] = $value;
 					}
+				}
+				$filedata = date("d.m.y", filectime($filename));
+				$textMain[$value] = $textMain[$value] . "		{
+			\"FileName\": \"{$dataDoc['versions'][$j]['FileName']}\",
+			\"Size\": {$size},
+			\"Md5\": \"{$md5}\",
+			\"Data\": \"{$filedata}\"
+		},\n";
+			}
+			$textMain[$value] = substr($textMain[$value],0,-2);
+			$textMain[$value] = $textMain[$value] . "
+	]
+}";
+			$arrayName = checkExistDocs($value); //Поиск всех pdf файлов в заданой папке
+  			$count = count($arrayName);
+			for ($i=0; $i < $count; $i++) {
+				$filename = "{$pathDocs}{$value}/{$arrayName[$i]}";
+				$md5 = md5_file($filename);
+				$size = filesize($filename);
+				$filedata = date("d.m.y", filectime($filename));
+				$text[$value] = $text[$value] . "		{
+			\"FileName\": \"{$arrayName[$i]}\",
+			\"Size\": {$size},
+			\"Md5\": \"{$md5}\",
+			\"Data\": \"{$filedata}\"
+		},\n";
+			}
+			$text[$value] = substr($text[$value],0,-2);
+			$text[$value] = $text[$value] . "
+	]
+}";
+			if (strcasecmp($textMain[$value], $text[$value]) !== 0) {
+				$flag = false;
+				if (!in_array($value, $array)) {
+					$array[] = $value;
 				}
 			}
 		}
@@ -93,9 +142,8 @@
 			$message = "Ошибок и несоответствий в файлах не найдено";
 			echo "<script type='text/javascript'>alert('{$message}');</script>";
 		} else {
-			$lengthArray = count($array);
-			for ($i=0; $i < $lengthArray; $i++) {
-				$request = $request . "document[]={$array[$i]}&";
+			foreach ($array as $value) {
+				$request = $request . "document[]={$value}&";
 			}
 			header ("Location: ../web/index.php?{$request}");
 		}

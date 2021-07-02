@@ -137,6 +137,6 @@ header {
 	width: 68px;
 	height: 68px;
 	float: left;
-	background: url('../assets/origami-logo.svg') no-repeat;
+	background: url('origami-logo.svg') no-repeat;
 	background-size: contain;
 }
