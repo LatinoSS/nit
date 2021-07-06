@@ -1,15 +1,14 @@
 <?php
 	$doc = $_GET['doc'];
-	$json = file_get_contents("{$pathDocs}{$doc}/index.json");
-	$data = json_decode($json, true);
-	$count = count($data['versions']);
+	$jsonDoc = file_get_contents("{$pathDocs}{$doc}/index.json");
+	$dataDoc = json_decode($jsonDoc, true);
 ?>
 <!DOCTYPE html>
 <html>
 <head>
 	<meta charset="utf-8">
 	<link rel="stylesheet" type="text/css" href="style.css">
-	<title><?= $data['Title'] ?></title>
+	<title><?= $dataDoc['Title'] ?></title>
 </head>
 <body>
 <header>
@@ -19,13 +18,13 @@
 		<span id="returnBack"><a href="/" class="naw">Главная</a></span>
 	</div>
 </header>
-<h1 class="title"><?= $data['Title'] ?></h1>
+<h1 class="title"><?= $dataDoc['Title'] ?></h1>
 <div class="container">
 	<div class="row">
 		<div class="col-lg">
 			<div class="underTitle">
 				<h3>
-					<?= $data['BigTitle'] ?>
+					<?= $dataDoc['BigTitle'] ?>
 				</h3>
 			</div>
 	    </div>
@@ -39,12 +38,12 @@
 				    	<th>Дата изменения</th>
 				 	</tr>
 				 	<?php
-				 		for ($i=0; $i < $count; $i++) { ?>
+				 		foreach ($dataDoc['versions'] as $i => $value) { ?>
 				 			<tr>
-						    	<td><a href="?doc=<?= $doc ?>&filename=<?= $data['versions'][$i]['FileName'] ?>" class="dowloadLink"><?= $data['versions'][$i]['FileName'] ?></a></td>
-						    	<td><?= $data['versions'][$i]['Size'] ?></td>
-						    	<td><?= $data['versions'][$i]['Md5'] ?></td>
-						    	<td><?= $data['versions'][$i]['Data'] ?></td>
+						    	<td><a href="?doc=<?= $doc ?>&filename=<?= $dataDoc['versions'][$i]['FileName'] ?>" class="dowloadLink"><?= $dataDoc['versions'][$i]['FileName'] ?></a></td>
+						    	<td><?= $dataDoc['versions'][$i]['Size'] ?></td>
+						    	<td><?= $dataDoc['versions'][$i]['Md5'] ?></td>
+						    	<td><?= $dataDoc['versions'][$i]['Data'] ?></td>
 						 	</tr>
 				 	<?php
 				 		} ?>

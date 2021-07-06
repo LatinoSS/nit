@@ -15,16 +15,16 @@
 			<div class="content">
 				<table class="documents">
 					<?php
-						$jsonF = file_get_contents("{$pathDocs}index.json");
-						$dataF = json_decode($jsonF, true);
-						foreach ($dataF as $value) {
-							$jsonN = file_get_contents("{$pathDocs}{$value}/index.json");
-							$dataN = json_decode($jsonN, true);
-							$name = $dataN['Title'];
+						$jsonAllFiles = file_get_contents("{$pathDocs}index.json");
+						$dataAllFiles = json_decode($jsonAllFiles, true);
+						foreach ($dataAllFiles as $dataFile) {
+							$jsonNameDoc = file_get_contents("{$pathDocs}{$dataFile}/index.json");
+							$dataNameDoc = json_decode($jsonNameDoc, true);
+							$name = $dataNameDoc['Title'];
 							?>
 							<tr class="row">
-								<td><a href="?doc=<?= $value ?>" class="docLink columnDoc"><?= $name ?></a></td>
-								<td><a href="?doc=<?= $value ?>&action=detail" class="docLink docFontSize columnDetail" target="_blank">(детали..)</a></td>
+								<td><a href="?doc=<?= $dataFile ?>" class="docLink columnDoc"><?= $name ?></a></td>
+								<td><a href="?doc=<?= $dataFile ?>&action=detail" class="docLink docFontSize columnDetail" target="_blank">(детали..)</a></td>
 							</tr>
 							<?php
 						}
