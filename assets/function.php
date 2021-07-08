@@ -51,6 +51,11 @@
 	    }
 	    return $result;
 	}
+	/*Функция нормального отображения текста в файле*/
+	function fix_readable_utf8($json_txt)
+	{
+		return preg_replace_callback('/\\\\u(\w{4})/', function ($matches) {return html_entity_decode('&#x' . $matches[1] . ';', ENT_COMPAT, 'UTF-8');}, $json_txt);
+	}
 	/*Функция выхода с ошибкой*/
 	function exit_with_error($error_text)
 	{
@@ -70,9 +75,9 @@
 	}
 	/*Функция скачивания документа конкретной версии*/
 	function downloadDocVersion(){
-		$documentCheckCorrect = preg_replace("/[^\w_ -]/", "", $_GET['doc']);
-		$filenameCheckCorrect = preg_replace("/[^\w_ -]/", "", $_GET['filename']);
-		if (('' == $documentCheckCorrect) || ('' == $filenameCheckCorrect))
+		$documentCheckCorrect = preg_replace("/[\w_ -]/", "", $_GET['doc']);
+		$filenameCheckCorrect = preg_replace("/[\w_ -]/", "", $_GET['filename']);
+		if (($_GET['doc'] == $documentCheckCorrect) || ($_GET['filename'] == $filenameCheckCorrect))
     		exit_bad_request('bad parameter doc or filename');
 		$doc = $_GET['doc'];
 		$filename = $_GET['filename'];
@@ -82,7 +87,7 @@
 		readfile($file);
 	}
 	/*Функция ищет все pdf файлы по заданной папке*/
-	function checkExistDocs(string $value){
+	function collect_pdf_file_names(string $value){
 		$directory = "{$GLOBALS['pathDocs']}{$value}";
 		$files = scandir($directory);
 		$pdf = ".pdf";
@@ -96,100 +101,122 @@
 	}
 	/*Функция ищет все pdf файлы по заданной папке и делает по ним index.json с их параметрами.*/
 	function downloadWrongJson(){
-		$documentCheckCorrect = preg_replace("/[^\w_ -]/", "", $_GET['doc']);
-		if (('' == $documentCheckCorrect))
+		$documentCheckCorrect = preg_replace("/[\w_ -]/", "", $_GET['doc']);
+		if (($_GET['doc'] == $documentCheckCorrect))
     		exit_bad_request('bad parameter doc');
 		$doc = $_GET['doc'];
-		$jsonDocData = file_get_contents("{$GLOBALS['pathDocs']}{$doc}/index.json");
-		$decodeJsonDocData = json_decode($jsonDocData, true);
-		$jsonfilename = "index.json";
-		$text = "{\"Title\": \"{$decodeJsonDocData[Title]}\", \"BigTitle\": \"{$decodeJsonDocData[BigTitle]}\", \"versions\": [ \n";
-  		$arrayName = checkExistDocs($doc); //Поиск всех pdf файлов в заданой папке
-  		$count = count($arrayName);
-		for ($i=0; $i < $count; $i++) {
-			$filename = "{$GLOBALS['pathDocs']}{$doc}/{$arrayName[$i]}";
+		$doc_json_txt = file_get_contents("{$GLOBALS['pathDocs']}{$doc}/index.json");
+		$decoded_doc_json = json_decode($doc_json_txt, true);
+		$json_filename = "index.json";
+		$jsonOutput = array(
+			"Title" => $decoded_doc_json[Title],
+			"BigTitle" => $decoded_doc_json[BigTitle],
+			"versions" => array() );
+  		$arrayNames = collect_pdf_file_names($doc);
+  		foreach ($arrayNames as $i => $arrayName) {
+  			$filename = "{$GLOBALS['pathDocs']}{$doc}/{$arrayName}";
 			$md5 = md5_file($filename);
 			$size = filesize($filename);
 			$filedata = date("d.m.y", filectime($filename));
-			$text = $text . "{\"FileName\": \"{$arrayName[$i]}\", \"Size\": {$size}, \"Md5\": \"{$md5}\", \"Data\": \"{$filedata}\"},\n";
-		}
-		$text = substr($text,0,-2);
-		$text = $text . "]}";
-		$textJson = prettyPrint($text);
+			$jsonOutput['versions'][$i] = array(
+				"FileName" => $arrayName,
+				"Size" => $size,
+				"Md5" => $md5,
+				"Data" => $filedata );
+  		}
+		$textJson = fix_readable_utf8(prettyPrint(json_encode($jsonOutput)));
 		header('Content-Type: application/json');
-		header("Content-Disposition: attachment; filename={$jsonfilename}");
+		header("Content-Disposition: attachment; filename={$json_filename}");
 		ob_end_clean();
 		echo "$textJson";
 		exit();
 	}
 	/*Функция скачивания документов на главной странице*/
 	function downloadMainDoc(){
-		$documentCheckCorrect = preg_replace("/[^\w_ -]/", "", $_GET['doc']);
-		if ('' == $documentCheckCorrect)
+		$documentCheckCorrect = preg_replace("/[\w_ -]/", "", $_GET['doc']);
+		if ($_GET['doc'] == $documentCheckCorrect)
     		exit_bad_request('bad parameter doc');
 		$doc = $_GET['doc'];
-		$jsonDocData = file_get_contents("{$GLOBALS['pathDocs']}{$doc}/index.json");
-		$decodeJsonDocData = json_decode($jsonDocData, true);
-		$count = count($decodeJsonDocData['versions']);
-		$request = "{$decodeJsonDocData['versions'][$count-1]['FileName']}";
-		$file = "{$GLOBALS['pathDocs']}{$doc}/{$request}";
+		$doc_json_txt = file_get_contents("{$GLOBALS['pathDocs']}{$doc}/index.json");
+		$decoded_doc_json = json_decode($doc_json_txt, true);
+		$count = count($decoded_doc_json['versions']);
+		$desired_file = $decoded_doc_json['versions'][$count-1]['FileName'];
+		$file = "{$GLOBALS['pathDocs']}{$doc}/{$desired_file}";
 		header('Content-Type: application/pdf');
-		header("Content-Disposition: attachment; filename={$request}");
+		header("Content-Disposition: attachment; filename={$desired_file}");
 		readfile($file);
 	}
-	/*Функция просмотра всех возможных документов и определение расхождений данных документа с данными из index.json
-	Если расхождений нет, то откывается alert с соответствующим текстом
-	Если расхождения есть, то откывается страница с проблемными документами, можно скачать коррекные данные*/
-	function checkWrongDoc(){
-		$flag = true;
-		$jsonDocs = file_get_contents("{$GLOBALS['pathDocs']}index.json");
-		$decodeJsonDocs = json_decode($jsonDocs, true);
-		$array = array();
-		foreach ($decodeJsonDocs as $key => $decodeJsonDoc) {
-			$jsonDoc = file_get_contents("{$GLOBALS['pathDocs']}{$decodeJsonDoc}/index.json");
-			$decodeDataDoc = json_decode($jsonDoc, true);
-			$countDoc = count($decodeDataDoc['versions']);
-			for ($j=0; $j < $countDoc; $j++) {
-				$filename = "{$GLOBALS['pathDocs']}{$decodeJsonDoc}/{$decodeDataDoc['versions'][$j]['FileName']}";
-				$md5 = md5_file($filename);
-				$size =filesize($filename);
-				if ($md5 != $decodeDataDoc['versions'][$j]['Md5'] || $size != $decodeDataDoc['versions'][$j]['Size']) {
-					$flag = false;
-					if (!in_array($decodeJsonDoc, $array)) {
-						$array[] = $decodeJsonDoc;
-					}
-				}
-				$filedata = date("d.m.y", filectime($filename));
-				$textMain[$decodeJsonDoc] = $textMain[$decodeJsonDoc] . "{\"FileName\": \"{$decodeDataDoc['versions'][$j]['FileName']}\", \"Size\": {$size}, \"Md5\": \"{$md5}\", \"Data\": \"{$filedata}\"},\n";
-			}
-			$textMain[$decodeJsonDoc] = substr($textMain[$decodeJsonDoc],0,-2);
-			$textMain[$decodeJsonDoc] = $textMain[$decodeJsonDoc] . "]}";
-			$arrayName = checkExistDocs($decodeJsonDoc); //Поиск всех pdf файлов в заданой папке
-  			$count = count($arrayName);
-			for ($i=0; $i < $count; $i++) {
-				$filename = "{$GLOBALS['pathDocs']}{$decodeJsonDoc}/{$arrayName[$i]}";
-				$md5 = md5_file($filename);
-				$size = filesize($filename);
-				$filedata = date("d.m.y", filectime($filename));
-				$text[$decodeJsonDoc] = $text[$decodeJsonDoc] . "{\"FileName\": \"{$arrayName[$i]}\", \"Size\": {$size}, \"Md5\": \"{$md5}\", \"Data\": \"{$filedata}\"},\n";
-			}
-			$text[$decodeJsonDoc] = substr($text[$decodeJsonDoc],0,-2);
-			$text[$decodeJsonDoc] = $text[$decodeJsonDoc] . "]}";
-			if (strcasecmp($textMain[$decodeJsonDoc], $text[$decodeJsonDoc]) !== 0) {
-				$flag = false;
-				if (!in_array($decodeJsonDoc, $array)) {
-					$array[] = $decodeJsonDoc;
-				}
-			}
-		}
-		if ($flag == true) {
+	/*Функция выдачи файлов несоответствий или собщения о том, что ошибок нет*/
+	function out_wrong_doc_file_names($wrong_docs_folder_names)
+	{
+		if (empty($wrong_docs_folder_names))
+		{
 			$message = "Ошибок и несоответствий в файлах не найдено";
 			echo "<script type='text/javascript'>alert('{$message}');</script>";
-		} else {
-			foreach ($array as $nameDoc) {
+		}
+		else
+		{
+			foreach ($wrong_docs_folder_names as $nameDoc)
+			{
 				$request = $request . "document[]={$nameDoc}&";
 			}
 			header ("Location: ../web/index.php?{$request}");
 		}
+	}
+	/*Функция создания структуры на основе данных реальных файлов*/
+	function read_real_doc_description($doc_folder_name)
+	{
+		$pdf_file_names = collect_pdf_file_names($doc_folder_name);
+		foreach ($pdf_file_names as $i => $pdf_file_name) {
+			$filename = "{$GLOBALS['pathDocs']}{$doc_folder_name}/{$pdf_file_name}";
+			$md5 = md5_file($filename);
+			$size = filesize($filename);
+			$filedata = date("d.m.y", filectime($filename));
+			$array_of_structures['versions'][$i] = array(
+			    "FileName"  => $pdf_file_name,
+			    "Size" => $size,
+			    "Md5" => $md5,
+			    "Data" => $filedata );
+		}
+		return $array_of_structures;
+	}
+	/*Функция создания структуры на основе данных взятых из index.json.txt*/
+	function read_index_doc_description($doc)
+	{
+		$count = count($doc['versions']);
+		for ($i=0; $i < $count; $i++) {
+			$path = $doc['versions'][$i];
+			$fileName = $path['FileName'];
+			$size = $path['Size'];
+			$md5 = $path['Md5'];
+			$data = $path['Data'];
+			$array_of_structures['versions'][$i] = array(
+			    "FileName"  => $fileName,
+			    "Size" => $size,
+			    "Md5" => $md5,
+			    "Data" => $data );
+		}
+		return $array_of_structures;
+	}
+	/*Функция сравнения двух структур, представленных в виде строк
+	Если строки разные, значит данные не совпадают*/
+	function checkWrongDoc()
+	{
+		$doc_folder_names_json_txt = file_get_contents("{$GLOBALS['pathDocs']}index.json");
+		$doc_folder_names = json_decode($doc_folder_names_json_txt, true);
+		$wrong_docs_folder_names = array();
+		foreach ($doc_folder_names as $doc_folder_name)
+		{
+			$doc_json_txt = file_get_contents("{$GLOBALS['pathDocs']}{$doc_folder_name}/index.json");
+			$doc = json_decode($doc_json_txt, true);
+			$real_doc = serialize(read_real_doc_description($doc_folder_name));
+			$index_doc = serialize(read_index_doc_description($doc));
+			if (strcasecmp($real_doc, $index_doc) !== 0){
+				if (!in_array($doc_folder_name, $wrong_docs_folder_names)) {
+					$wrong_docs_folder_names[] = $doc_folder_name;
+				}
+			}
+		}
+		out_wrong_doc_file_names($wrong_docs_folder_names);
 	}
 ?>
