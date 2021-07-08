@@ -90,10 +90,10 @@
 	function collect_pdf_file_names(string $value){
 		$directory = "{$GLOBALS['pathDocs']}{$value}";
 		$files = scandir($directory);
-		$pdf = ".pdf";
+		$pdf = "pdf";
 		foreach ($files as $filename) {
-			$pos = strpos($filename, $pdf);
-			if ($pos !== false) {
+			$check_extension = pathinfo($filename);
+			if ($check_extension['extension'] == $pdf) {
 				$arrayFileName[] = $filename;
 			}
 		}
