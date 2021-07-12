@@ -43,7 +43,7 @@
 						    	<td><a href="?doc=<?= $doc ?>&filename=<?= $dataDoc['versions'][$i]['FileName'] ?>" class="dowloadLink"><?= $dataDoc['versions'][$i]['FileName'] ?></a></td>
 						    	<td><?= $dataDoc['versions'][$i]['Size'] ?></td>
 						    	<td><?= $dataDoc['versions'][$i]['Md5'] ?></td>
-						    	<td><?= $dataDoc['versions'][$i]['Data'] ?></td>
+						    	<td><?= $dataDoc['versions'][$i]['Date'] ?></td>
 						 	</tr>
 				 	<?php
 				 		} ?>
