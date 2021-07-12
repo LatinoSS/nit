@@ -54,7 +54,9 @@
 	/*Функция нормального отображения текста в файле*/
 	function fix_readable_utf8($json_txt)
 	{
-		return preg_replace_callback('/\\\\u(\w{4})/', function ($matches) {return html_entity_decode('&#x' . $matches[1] . ';', ENT_COMPAT, 'UTF-8');}, $json_txt);
+		return preg_replace_callback('/\\\\u(\w{4})/', function ($matches) {
+			return html_entity_decode('&#x' . $matches[1] . ';', ENT_COMPAT, 'UTF-8');
+		}, $json_txt);
 	}
 	/*Функция выхода с ошибкой*/
 	function exit_with_error($error_text)
