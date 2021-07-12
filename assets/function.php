@@ -141,7 +141,7 @@
 		{
 			foreach ($wrong_docs_folder_names as $nameDoc)
 			{
-				$request = $request . "document[]={$nameDoc}&";
+				$request.= "document[]={$nameDoc}&";
 			}
 			header ("Location: ../web/index.php?{$request}");
 		}
