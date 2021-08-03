@@ -1,13 +1,15 @@
 .title{
 	text-align: center;
-	font-family: "Andale Mono", monospace;
-	color: #454545;
+	font-family: "ProximaNova-Reg", sans-serif;
+	font-size: 32px;
+	color: #333333;
 }
 .underTitle{
-	font-family: "Andale Mono", monospace;
+	font-family: "ProximaNova-Reg", sans-serif;
+	font-size: 26px;
 	padding-left: 12px;
 	display: block;
-	color: #454545;
+	color: #333333;
 }
 .container{
 	max-width: 1250px;
@@ -28,11 +30,11 @@
 }
 .docLink{
 	text-decoration: none;
-	font-size: 18px;
-	color: #ff6969;
+	font-size: 16px;
+	color: #DB0306;
 }
 .docLink:hover{
-	color: #fc4242;
+	color: #d66768;
 	transition: 0.4s;
 }
 .documents{
@@ -64,7 +66,7 @@
 }
 table{
 	width: 100%;
-	font-family: "FreeMono", monospace;
+	font-family: "IBMPlexSansRegular", sans-serif;
 	color: #454545;
 	border-spacing: 0 0;
 }
@@ -82,7 +84,7 @@ td{
 	color: #454545;
 }
 .dowloadLink:hover{
-	color: #fc4242;
+	color: #d66768;
 	transition: 0.4s;
 }
 body, html {
@@ -104,7 +106,7 @@ header {
 }
 #companyName{
 	font-family: "Andale Mono", monospace;
-	color: #fc4242;
+	color: #DB0306;
 	font-size: 19px;
 	padding: 12px;
 	width: 220px;
@@ -123,14 +125,14 @@ header {
 }
 .naw{
 	text-decoration: none;
-	color: #fc4242;
+	color: #DB0306;
 }
 .naw:hover{
-	color: #ff8c8c;
+	color: #d66768;
 }
 #name{
 	text-decoration: none;
-	color: #fc4242;
+	color: #DB0306;
 }
 #logo{
 	margin-left: 12px;
@@ -139,4 +141,19 @@ header {
 	float: left;
 	background: url('origami-logo.svg') no-repeat;
 	background-size: contain;
+}
+@font-face {
+	font-family: "IBMPlexSansRegular";
+	src: url("IBMPlexSans-Regular.ttf") format("truetype");
+	font-style: normal;
+	font-weight: normal;
+}
+@font-face {
+	font-family: "ProximaNova-Reg";
+	src: url("ProximaNova-Regular.ttf") format("truetype");
+	font-style: normal;
+	font-weight: normal;
+}
+h4{
+	padding-left: 12px;
 }

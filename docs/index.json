@@ -1,12 +1,12 @@
 [
-  "publOfferChangePmAu",
-  "publOfferInfoServices",
-  "publOfferNewEquip",
-  "publOfferOnceUpd",
-  "publOfferPau",
+  "licenseAgree",
+  "licenseContract",
   "publOfferPauLimitedPeriod",
   "publOfferPauTechSuport",
+  "publOfferOnceUpd",
+  "publOfferNewEquip",
+  "publOfferChangePmAu",
   "publOfferShowcaseCreditorsCommittee",
-  "publOfferTradeDataShowcase",
-  "userAgreeWithBankroTECH"
+  "userAgreeWithBankroTECH",
+  "publOfferTradeDataShowcase"
 ]

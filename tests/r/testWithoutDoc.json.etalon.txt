@@ -1,0 +1,12 @@
+{
+	"Title": "Пользовательское соглашение об обмене данными с Bankro.TECH",
+	"BigTitle": "ПОЛЬЗОВАТЕЛЬСКОЕ СОГЛАШЕНИЕ ОБ ОБМЕНЕ ДАННЫМИ С ИНФОРМАЦИОННОЙ СИСТЕМОЙ «Bankro.TECH»",
+	"versions": [
+		{
+			"FileName": "UserAgreementWithBankroTECH.pdf",
+			"Size": 436617,
+			"Md5": "294854420d95c6bdeee8ed4e5af1186d",
+			"Date": "01.07.21"
+		}
+	]
+}

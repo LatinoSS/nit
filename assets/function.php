@@ -58,14 +58,15 @@
 			return html_entity_decode('&#x' . $matches[1] . ';', ENT_COMPAT, 'UTF-8');
 		}, $json_txt);
 	}
+	function nice_json_encode($obj)
+	{
+		return fix_readable_utf8(prettyPrint(json_encode($obj)));
+	}
 	/*Функция выхода с ошибкой*/
 	function exit_with_error($error_text)
 	{
-	  	write_to_log($error_text);
 	  	if (function_exists('write_to_log_auth_info'))
 	    	write_to_log_auth_info();
-		write_to_log('$_GET:');
-		write_to_log($_GET);
 		exit;
 	}
 	/*Функция выхода с неправильным запросом*/
@@ -79,7 +80,7 @@
 	function SafeGetFilenameArg($name)
 	{
 		if (!isset($_GET[$name]))
-			exit_bad_request("skipped argument $name");
+			exit_bad_request('skipped argument $name');
 		$value = $_GET[$name];
 		$value_without_wrong_chars = preg_replace("/[\w_ -]/", "", $value);
 		if ($value == $value_without_wrong_chars)
@@ -87,7 +88,8 @@
     	return $value;
 	}
 	/*Функция скачивания документа конкретной версии*/
-	function downloadDocVersion(){
+	function downloadDocVersion()
+	{
 		$doc = SafeGetFilenameArg("doc");
 		$filename = SafeGetFilenameArg("filename");
 		$file = "{$GLOBALS['pathDocs']}{$doc}/{$filename}";
@@ -96,7 +98,8 @@
 		readfile($file);
 	}
 	/*Функция ищет все pdf файлы по заданной папке*/
-	function collect_pdf_file_names($value){
+	function collect_pdf_file_names($value)
+	{
 		$directory = "{$GLOBALS['pathDocs']}{$value}";
 		$files = scandir($directory);
 		$pdf = "pdf";
@@ -108,19 +111,21 @@
 		return $arrayFileName;
 	}
 	/*Функция скачивания файлов index.json.txt с ошибками*/
-	function downloadWrongJson(){
+	function downloadWrongJson()
+	{
 		$doc_folder_name = SafeGetFilenameArg("doc");
 		$doc_json_txt = file_get_contents("{$GLOBALS['pathDocs']}{$doc_folder_name}/index.json");
 		$doc = json_decode($doc_json_txt, true);
 		$real_doc = read_real_doc_description($doc, $doc_folder_name);
 		header('Content-Type: application/json');
-		header("Content-Disposition: attachment; filename={$jsonfilename}");
+		header("Content-Disposition: attachment; filename=index.json");
 		ob_end_clean();
 		echo fix_readable_utf8(prettyPrint(json_encode($real_doc)));
 		exit();
 	}
 	/*Функция скачивания документов на главной странице*/
-	function downloadMainDoc(){
+	function downloadMainDoc()
+	{
 		$doc = SafeGetFilenameArg("doc");
 		$doc_json_txt = file_get_contents("{$GLOBALS['pathDocs']}{$doc}/index.json");
 		$decoded_doc_json = json_decode($doc_json_txt, true);
@@ -137,15 +142,16 @@
 		if (empty($wrong_docs_folder_names))
 		{
 			$message = "Ошибок и несоответствий в файлах не найдено";
-			echo "<script type='text/javascript'>alert('{$message}');</script>";
+			echo "{$message}";
 		}
 		else
 		{
+			$request = "";
 			foreach ($wrong_docs_folder_names as $nameDoc)
 			{
 				$request.= "document[]={$nameDoc}&";
 			}
-			header ("Location: ../web/index.php?{$request}");
+				header ("Location: ../web/index.php?{$request}");																			
 		}
 	}
 	/*Функция дополнения имеющейся json структуры недостоющими данными, взятыми на основе хранимых файлов*/
@@ -202,5 +208,46 @@
 			}
 		}
 		out_wrong_doc_file_names($wrong_docs_folder_names);
+	}
+
+	function CheckAction()
+	{
+		if (isset($_GET['doc'])){
+			downloadWrongJson();
+		} else {
+			checkWrongDoc();
+		}
+	}
+	function MainAction()
+	{
+		if (isset($_GET['doc']))
+			downloadMainDoc();
+	}
+	function DetailAction()
+	{
+		global $pathAsset, $base_url;
+		if (isset($_GET['doc']))
+			require("{$pathAsset}document.php");
+	}
+	function getDoclist()
+	{
+		global $pathDocs, $base_url;
+		$docs_json_txt = file_get_contents("{$pathDocs}index.json");
+		$docs = json_decode($docs_json_txt, true);
+		$documents= array();
+		foreach ($docs as $dname)
+		{
+			$doc_json_txt = file_get_contents("$pathDocs$dname/index.json");
+			$doc= json_decode($doc_json_txt, true);
+			$url= "{$base_url}index.php?doc=$dname";
+			$documents[]= array(
+				'Title'=>$doc['Title']
+				,'url'=>array( 'doc'=>$url ,'detail'=>$url.'&action=detail' )
+			);
+		}
+		header('Access-Control-Allow-Origin: *');
+		header('Access-Control-Allow-Headers: *');
+		header('Content-Type: application/json');
+		echo nice_json_encode($documents);
 	}
 ?>

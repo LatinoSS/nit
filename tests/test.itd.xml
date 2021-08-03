@@ -1,0 +1,91 @@
+<?xml version="1.0"?>
+<package>
+  <spec>
+    <sname>docs</sname>
+    <fname>test docs</fname>
+    <descr>test docs</descr>
+  </spec>
+
+  <params>
+    <par><name>php</name><value>C:\OpenServer\modules\php\PHP_7.1\php.exe</value></par>
+  </params>
+
+  <tests>  
+    <php>
+      <spec><sname>testGetDoc</sname></spec>      
+      <script>Tests\test\test.php</script>
+      <out>r\testGetDoc.html</out>
+      <get>
+        <par><name>doc</name><value>userAgreeWithBankroTECH</value></par>
+	<par><name>action</name><value>detail</value></par>
+      </get>
+    </php>
+
+    <php>
+      <spec><sname>testAddFile</sname></spec>      
+      <script>Tests\testDownlWrong\test.php</script>
+      <out>r\testAddFile.json.txt</out>
+      <get>
+        <par><name>action</name><value>check</value></par>
+	<par><name>doc</name><value>publOfferChangePmAu</value></par>
+	<par><name>rootDocFolder</name><value>tests/Tests/testAddFile/</value></par>
+      </get>
+      <check_session>false</check_session>
+    </php>
+
+    <php>
+      <spec><sname>testFileMd5Size</sname></spec>      
+      <script>Tests\testDownlWrong\test.php</script>
+      <out>r\testFileMd5Size.json.txt</out>
+      <get>
+        <par><name>action</name><value>check</value></par>
+	<par><name>doc</name><value>publOfferPau</value></par>
+	<par><name>rootDocFolder</name><value>tests/Tests/testFileMd5Size/</value></par>
+      </get>
+      <check_session>false</check_session>
+    </php>
+
+    <php>
+      <spec><sname>testGood</sname></spec>      
+      <script>Tests\testGood\test.php</script>
+      <out>r\testGood.txt</out>
+      <check_session>false</check_session>
+    </php>
+
+    <php>
+      <spec><sname>testOutOfOrder</sname></spec>     
+      <script>Tests\testDownlWrong\test.php</script>
+      <out>r\testOutOfOrder.json.txt</out>
+      <get>
+        <par><name>action</name><value>check</value></par>
+	<par><name>doc</name><value>publOfferPau</value></par>
+	<par><name>rootDocFolder</name><value>tests/Tests/testOutOfOrder/</value></par>
+      </get>
+      <check_session>false</check_session>
+    </php>
+
+    <php>
+      <spec><sname>testWithoutDoc</sname></spec>     
+      <script>Tests\testDownlWrong\test.php</script>
+      <out>r\testWithoutDoc.json.txt</out>
+      <get>
+        <par><name>action</name><value>check</value></par>
+	<par><name>doc</name><value>userAgreeWithBankroTECH</value></par>
+	<par><name>rootDocFolder</name><value>tests/Tests/testWithoutDoc/</value></par>
+      </get>
+      <check_session>false</check_session>
+    </php>
+
+    <php>
+      <spec><sname>testWithoutGetDoc</sname></spec>     
+      <script>Tests\testDownlWrong\test.php</script>
+      <out>r\testWithoutGetDoc.txt</out>
+      <get>
+        <par><name>action</name><value>check</value></par>
+	<par><name>doc</name><value></value></par>
+	<par><name>rootDocFolder</name><value>docs/</value></par>
+      </get>
+      <check_session>false</check_session>
+    </php>
+  </tests>
+</package>

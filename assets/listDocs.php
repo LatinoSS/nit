@@ -10,7 +10,7 @@
 	<div class="container">
 	    <div class="col-sm">
 	    	<div class="underTitle">
-	    		<h2>Оферты</h2>
+	    		<h4>Договоры</h4>
 	    	</div>
 			<div class="content">
 				<table class="documents">
@@ -23,7 +23,7 @@
 							$name = $dataNameDoc['Title'];
 							?>
 							<tr class="row">
-								<td><a href="?doc=<?= $dataFile ?>" class="docLink columnDoc"><?= $name ?></a></td>
+								<td><a href="?doc=<?= $dataFile ?>&action=main" class="docLink columnDoc"><?= $name ?></a></td>
 								<td><a href="?doc=<?= $dataFile ?>&action=detail" class="docLink docFontSize columnDetail" target="_blank">(детали..)</a></td>
 							</tr>
 							<?php

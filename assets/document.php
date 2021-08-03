@@ -1,13 +1,13 @@
 <?php
 	$doc = $_GET['doc'];
-	$jsonDoc = file_get_contents("{$pathDocs}{$doc}/index.json");
+	$jsonDoc = file_get_contents("{$GLOBALS['pathDocs']}{$doc}/index.json");
 	$dataDoc = json_decode($jsonDoc, true);
 ?>
 <!DOCTYPE html>
 <html>
 <head>
 	<meta charset="utf-8">
-	<link rel="stylesheet" type="text/css" href="style.css">
+	<link rel="stylesheet" type="text/css" href="<?= $base_url ?>style.css">
 	<title><?= $dataDoc['Title'] ?></title>
 </head>
 <body>
@@ -40,7 +40,7 @@
 				 	<?php
 				 		foreach ($dataDoc['versions'] as $i => $value) { ?>
 				 			<tr>
-						    	<td><a href="?doc=<?= $doc ?>&filename=<?= $dataDoc['versions'][$i]['FileName'] ?>" class="dowloadLink"><?= $dataDoc['versions'][$i]['FileName'] ?></a></td>
+						    	<td><a href="?doc=<?= $doc ?>&filename=<?= $dataDoc['versions'][$i]['FileName'] ?>&action=doc-version" class="dowloadLink"><?= $dataDoc['versions'][$i]['FileName'] ?></a></td>
 						    	<td><?= $dataDoc['versions'][$i]['Size'] ?></td>
 						    	<td><?= $dataDoc['versions'][$i]['Md5'] ?></td>
 						    	<td><?= $dataDoc['versions'][$i]['Date'] ?></td>
