@@ -1,7 +1,6 @@
 <?php
-require 'C:/OpenServer/domains/russianitpractice/assets/config.php';
-require 'C:/OpenServer/domains/russianitpractice/assets/function.php';
-
+require realpath(__DIR__ . '/..' . "/assets/config.php");
+require realpath(__DIR__ . '/..' . "/assets/function.php");
 try
 {
 	$action= (!isset($_GET['action'])) ? 'main' : $_GET['action'];
