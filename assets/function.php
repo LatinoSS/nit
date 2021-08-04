@@ -209,7 +209,6 @@
 		}
 		out_wrong_doc_file_names($wrong_docs_folder_names);
 	}
-
 	function CheckAction()
 	{
 		if (isset($_GET['doc'])){
