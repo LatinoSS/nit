@@ -1,6 +1,7 @@
 <?php
+	global $pathDocs;
 	$doc = $_GET['doc'];
-	$jsonDoc = file_get_contents("{$GLOBALS['pathDocs']}{$doc}/index.json");
+	$jsonDoc = file_get_contents("{$pathDocs}{$doc}/index.json");
 	$dataDoc = json_decode($jsonDoc, true);
 ?>
 <!DOCTYPE html>

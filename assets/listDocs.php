@@ -15,6 +15,7 @@
 			<div class="content">
 				<table class="documents">
 					<?php
+						global $pathDocs;
 						$jsonAllFiles = file_get_contents("{$pathDocs}index.json");
 						$dataAllFiles = json_decode($jsonAllFiles, true);
 						foreach ($dataAllFiles as $dataFile) {
