@@ -6,6 +6,5 @@
 	} else {
 		$pathDocs.= "docs/";
 	}
-	$rootFolder = "web";
 	$base_url= "http://russianitpractice/web/";
 ?>

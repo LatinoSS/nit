@@ -155,7 +155,7 @@
 			{
 				$request.= "document[]={$nameDoc}&";
 			}
-				header ("Location: ../web/index.php?{$request}");																			
+				header ("Location: ../index.php?{$request}");
 		}
 	}
 	/*Функция дополнения имеющейся json структуры недостоющими данными, взятыми на основе хранимых файлов*/
