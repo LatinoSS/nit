@@ -1,6 +1,6 @@
 <?php
-require realpath(__DIR__ . '/assets/config.php');
-require realpath(__DIR__ . '/assets/function.php');
+require realpath(__DIR__ . '/../assets/config.php');
+require realpath(__DIR__ . '/../assets/function.php');
 try
 {
 	$action= (!isset($_GET['action'])) ? 'main' : $_GET['action'];
@@ -13,7 +13,7 @@ try
 		case 'detail': DetailAction(); break; // Условие изменения отображаемого контента на странице
 	}
 	// Условия изменения отображаемого контента на странице
- 	if ($_SERVER['REQUEST_URI'] == "/" || $_SERVER['REQUEST_URI'] == "") {
+ 	if ($_SERVER['REQUEST_URI'] == "/web/" || $_SERVER['REQUEST_URI'] == "/web") {
  		require("{$pathAsset}listDocs.php");
  	} else if (isset($_GET['document'])) {
 		require("{$pathAsset}errorFile.php");

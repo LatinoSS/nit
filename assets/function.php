@@ -244,7 +244,7 @@
 		{
 			$doc_json_txt = file_get_contents("$pathDocs$dname/index.json");
 			$doc= json_decode($doc_json_txt, true);
-			$url= "{$base_url}index.php?doc=$dname";
+			$url= "?doc=$dname";
 			$documents[]= array(
 				'Title'=>$doc['Title']
 				,'url'=>array( 'doc'=>$url ,'detail'=>$url.'&action=detail' )
