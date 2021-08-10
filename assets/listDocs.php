@@ -2,10 +2,15 @@
 <html>
 <head>
 	<meta charset="utf-8">
-	<link rel="stylesheet" type="text/css" href="<?= $base_url ?>style.css">
+	<link rel="stylesheet" type="text/css" href="style.css">
 	<title>Документы</title>
 </head>
 <body>
+	<header>
+		<div id="headerInside">
+			<span id="logo"></span>
+		</div>
+	</header>
 	<h1 class="title">Документы</h1>
 	<div class="container">
 	    <div class="col-sm">

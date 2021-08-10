@@ -145,8 +145,7 @@
 	{
 		if (empty($wrong_docs_folder_names))
 		{
-			$message = "Ошибок и несоответствий в файлах не найдено";
-			echo "{$message}";
+			echo "Ошибок и несоответствий в файлах не найдено";
 		}
 		else
 		{
@@ -155,7 +154,7 @@
 			{
 				$request.= "document[]={$nameDoc}&";
 			}
-				header ("Location: ../index.php?{$request}");
+				header ("Location: ?{$request}");
 		}
 	}
 	/*Функция дополнения имеющейся json структуры недостоющими данными, взятыми на основе хранимых файлов*/
@@ -230,22 +229,22 @@
 	}
 	function DetailAction()
 	{
-		global $pathAsset, $base_url;
+		global $base_url;
 		if (isset($_GET['doc']))
-			require("{$pathAsset}document.php");
+			require realpath(__DIR__ . '/../assets/document.php');
 	}
 	function getDoclist()
 	{
 		global $pathDocs, $base_url;
 		$docs_json_txt = file_get_contents("{$pathDocs}index.json");
 		$docs = json_decode($docs_json_txt, true);
-		$documents= array();
+		$documents = array();
 		foreach ($docs as $dname)
 		{
 			$doc_json_txt = file_get_contents("$pathDocs$dname/index.json");
-			$doc= json_decode($doc_json_txt, true);
-			$url= "{$base_url}?doc=$dname";
-			$documents[]= array(
+			$doc = json_decode($doc_json_txt, true);
+			$url = "{$base_url}?doc=$dname";
+			$documents[] = array(
 				'Title'=>$doc['Title']
 				,'url'=>array( 'doc'=>$url ,'detail'=>$url.'&action=detail' )
 			);

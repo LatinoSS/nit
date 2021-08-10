@@ -8,14 +8,13 @@
 <html>
 <head>
 	<meta charset="utf-8">
-	<link rel="stylesheet" type="text/css" href="<?= $base_url ?>style.css">
+	<link rel="stylesheet" type="text/css" href="style.css">
 	<title><?= $dataDoc['Title'] ?></title>
 </head>
 <body>
 <header>
 	<div id="headerInside">
 		<span id="logo"></span>
-		<span id="companyName"><a href="/" id="name">Помощник арбитражного управляющего</a></span>
 		<span id="returnBack"><a href="/" class="naw">Главная</a></span>
 	</div>
 </header>
