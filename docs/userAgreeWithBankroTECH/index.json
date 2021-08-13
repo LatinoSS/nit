@@ -1,8 +1,10 @@
 {
 	"Title": "Соглашение об обмене данными с Bankro.TECH",
-  	"BigTitle": "",
-  	"versions": [ 
-  		{
+	"tags": {
+		"PAU": "Соглашение об обмене данными с Bankro.TECH"
+	},
+	"versions": [
+		{
 			"FileName": "UserAgreementWithBankroTECH_.pdf",
 			"Size": 436617,
 			"Md5": "294854420d95c6bdeee8ed4e5af1186d",
@@ -13,6 +15,6 @@
 			"Size": 538751,
 			"Md5": "d109d79d37453d5249deba6866793998",
 			"Date": "16.03.20"
-		}		
+		}
 	]
 }

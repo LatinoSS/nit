@@ -5,5 +5,5 @@
 	} else {
 		$pathDocs.= "docs/";
 	}
-	$base_url= "http://russianitpractice/web/";
+	$base_url = "http://russianitpractice/web/";
 ?>

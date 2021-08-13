@@ -7,16 +7,13 @@
 </head>
 <body>
 	<header>
-		<div id="headerInside">
+		<div class="headerInsideMain">
 			<span id="logo"></span>
+			<span id="companyDoc">Официальные документы ООО РИТ</span>
 		</div>
 	</header>
-	<h1 class="title">Документы</h1>
-	<div class="container">
+	<div class="containerMain" id="container-margin-top">
 	    <div class="col-sm">
-	    	<div class="underTitle">
-	    		<h4>Договоры</h4>
-	    	</div>
 			<div class="content">
 				<table class="documents">
 					<?php
@@ -27,10 +24,15 @@
 							$jsonNameDoc = file_get_contents("{$pathDocs}{$dataFile}/index.json");
 							$dataNameDoc = json_decode($jsonNameDoc, true);
 							$name = $dataNameDoc['Title'];
+							$tag = $dataNameDoc['tags'];
+							$tags = '';
+							foreach ($tag as $key => $value) {
+								$tags.= "&tag={$key}";
+							}
 							?>
 							<tr class="row">
 								<td><a href="?doc=<?= $dataFile ?>&action=main" class="docLink columnDoc"><?= $name ?></a></td>
-								<td><a href="?doc=<?= $dataFile ?>&action=detail" class="docLink docFontSize columnDetail" target="_blank">(детали..)</a></td>
+								<td><a href="?doc=<?= $dataFile ?>&action=detail<?= $tags ?>" class="docLink docFontSize columnDetail" target="_blank">(детали..)</a></td>
 							</tr>
 							<?php
 						}

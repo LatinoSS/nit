@@ -18,6 +18,7 @@
       <get>
         <par><name>doc</name><value>userAgreeWithBankroTECH</value></par>
 	<par><name>action</name><value>detail</value></par>
+	<par><name>tag</name><value>PAU</value></par>
       </get>
     </php>
 

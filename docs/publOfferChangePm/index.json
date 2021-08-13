@@ -1,0 +1,20 @@
+{
+	"Title": "Договор на замену рабочего места ФА",
+	"tags": {
+		"FA": "Договор на замену рабочего места"
+	},
+	"versions": [
+		{
+			"FileName": "dogovor_na_zamenu_rm_.pdf",
+			"Size": 489265,
+			"Md5": "90af70a8ea63d3fea84c476b60618db0",
+			"Date": "05.05.11"
+		},
+		{
+			"FileName": "dogovor_na_zamenu_rm_new.pdf",
+			"Size": 485041,
+			"Md5": "bd8076ec56886004211e46bd315d014f",
+			"Date": "20.04.20"
+		}
+	]
+}

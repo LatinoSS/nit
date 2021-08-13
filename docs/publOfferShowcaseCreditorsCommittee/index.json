@@ -1,7 +1,9 @@
 {
 	"Title": "Соглашение о комитете кредиторов на Витрине",
-  	"BigTitle": "",
-  	"versions": [ 
+	"tags": {
+		"PAU": "Соглашение о комитете кредиторов на Витрине"
+	},
+	"versions": [
 		{
 			"FileName": "PublicOfferShowcaseCreditorsCommittee.pdf",
 			"Size": 493344,

@@ -16,6 +16,14 @@
 	margin: 0 auto;
 	padding: 0px 15px;
 }
+.containerMain{
+	max-width: 550px;
+	margin: 0 auto;
+	padding: 0px 15px;
+}
+#container-margin-top{
+margin-top: 30px;
+}
 .col-sm{
 	display: inline-block;
 	min-width: 576px;
@@ -99,8 +107,13 @@ header {
 	box-shadow: 0 2px 14px rgba(0, 0, 0, 0.09);
 	background-size: cover;
 }
-#headerInside {
+.headerInside {
 	width: 960px;
+	margin: 0 auto;
+	height: 70px;
+}
+.headerInsideMain {
+	width: 550px;
 	margin: 0 auto;
 	height: 70px;
 }
@@ -125,6 +138,7 @@ header {
 	width: 168px;
 	height: 60px;
 	float: left;
+	margin-right: 30px;
 	background: url('logo.svg') no-repeat;
 	background-size: contain;
 }
@@ -142,4 +156,14 @@ header {
 }
 h4{
 	padding-left: 12px;
+}
+#companyDoc{
+	font-family: "Andale Mono", monospace;
+	color: #41688C;
+	font-size: 19px;
+	padding: 20px 12px 23px 12px;
+	width: 320px;
+	position: absolute;
+    display: inline-block;
+    vertical-align: middle;
 }

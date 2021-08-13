@@ -1,7 +1,9 @@
 {
-	"Title": "Договор на новую комплектацию",
-  	"BigTitle": "",
-  	"versions": [ 
+	"Title": "Договор на новую комплектацию ПАУ",
+	"tags": {
+		"PAU": "Договор на новую комплектацию"
+	},
+	"versions": [
 		{
 			"FileName": "PublicOfferNewEquipment.pdf",
 			"Size": 627623,

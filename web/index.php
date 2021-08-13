@@ -9,7 +9,7 @@ try
 		case 'main': MainAction(); break; // Условие выполнения скачивания документа на главной странице
 		case 'check': CheckAction(); break; // Условие выполнения скачивания index.json документа с корректными данными документов
 		case 'doc-version': downloadDocVersion(); break; // Условие выполнения скачивания документа конкретной версии
-		case 'doc-list': getDoclist(); break; // Условие создания структуры данных для передачи по ajax
+		case 'doc-list': CheckTags(); break; // Условие создания структуры данных для передачи по ajax
 		case 'detail': DetailAction(); break; // Условие изменения отображаемого контента на странице
 	}
 	// Условия изменения отображаемого контента на странице

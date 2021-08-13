@@ -1,12 +1,22 @@
 [
   "licenseAgree",
   "licenseContract",
+  "licenseContractFa",
+  "licenseContractMp",
   "publOfferPauLimitedPeriod",
   "publOfferPauTechSuport",
+  "publOfferPauTechSuportFa",
   "publOfferOnceUpd",
+  "publOfferOnceUpdFa",
   "publOfferNewEquip",
+  "publOfferNewEquipFa",
+  "publOfferChangePm",
   "publOfferChangePmAu",
+  "publOfferChangePmMp",
   "publOfferShowcaseCreditorsCommittee",
   "userAgreeWithBankroTECH",
-  "publOfferTradeDataShowcase"
+  "publOfferTradeDataShowcase",
+  "contractMpUpgrade",
+  "publOfferOnceUpdMp",
+  "publOfferPauTechSuportMp"
 ]

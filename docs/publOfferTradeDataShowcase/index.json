@@ -1,7 +1,9 @@
 {
 	"Title": "Соглашение об обмене данными с Витриной",
-  	"BigTitle": "",
-  	"versions": [ 
+	"tags": {
+		"PAU": "Соглашение об обмене данными с Витриной"
+	},
+	"versions": [
 		{
 			"FileName": "PublicOfferTradeDataShowcase.pdf",
 			"Size": 482925,

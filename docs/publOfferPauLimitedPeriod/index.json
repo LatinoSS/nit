@@ -1,7 +1,9 @@
 {
-	"Title": "Лицензионный договор на ограниченный период",
-  	"BigTitle": "",
-  	"versions": [ 
+	"Title": "Лицензионный договор на ограниченный период ПАУ",
+	"tags": {
+		"PAU": "Лицензионный договор на ограниченный период"
+	},
+	"versions": [
 		{
 			"FileName": "lisenzionyy_dogovor_PAU_na_ogranichennoe_vremya_.pdf",
 			"Size": 552561,

@@ -98,19 +98,59 @@
 		header("Content-Disposition: attachment; filename={$filename}");
 		readfile($file);
 	}
-	/*Функция ищет все pdf файлы по заданной папке*/
+	/*Функция ищет все pdf файлы по заданной папке, сравнивает результат со списком имён взятым из json*/
 	function collect_pdf_file_names($value)
 	{
 		global $pathDocs;
 		$directory = "{$pathDocs}{$value}";
 		$files = scandir($directory);
 		$pdf = "pdf";
+		$arrayFileName = array();
 		foreach ($files as $filename) {
 			$check_extension = pathinfo($filename);
 			if ($check_extension['extension'] == $pdf)
 				$arrayFileName[] = $filename;
 		}
-		return $arrayFileName;
+		$arrayExistFileName = array();
+		$arrayExistFileName = collect_exist_file_names($value);
+		if (count($arrayExistFileName) < count($arrayFileName)) {
+			$arrayDiffsAddFile = array_diff($arrayFileName, $arrayExistFileName);
+		} elseif (count($arrayExistFileName) > count($arrayFileName)) {
+			$arrayDiffsWithOutFile = array_diff($arrayExistFileName, $arrayFileName);
+		} else {
+			$arrayDiffsAddFile = array_diff($arrayFileName, $arrayExistFileName);
+			$arrayDiffsWithOutFile = array_diff($arrayExistFileName, $arrayFileName);
+		}
+		if (isset($arrayDiffsAddFile) && isset($arrayDiffsWithOutFile)) {
+			return $arrayExistFileName;
+		} elseif (isset($arrayDiffsAddFile)) {
+			foreach ($arrayDiffsAddFile as $i => $arrayDiffAddFile) {
+				$arrayExistFileName[] = $arrayDiffAddFile;
+			}
+			return $arrayExistFileName;
+		} elseif (isset($arrayDiffsWithOutFile)) {
+			foreach ($arrayExistFileName as $i => $value) {
+				foreach ($arrayDiffsWithOutFile as $j => $arrayDiffWithOutFile) {
+					if ($value == $arrayDiffWithOutFile) {
+						unset($arrayExistFileName[$i]);
+					}
+				}
+			}
+			return $arrayExistFileName;
+		}
+	}
+	/*Функция собирает все названия файлов по заданной папке*/
+	function collect_exist_file_names($value)
+	{
+		global $pathDocs;
+		$doc_json_txt = file_get_contents("{$pathDocs}{$value}/index.json");
+		$doc = json_decode($doc_json_txt, true);
+		$count = count($doc['versions']);
+		$arrayExistFileName = array();
+		for ($i=0; $i < $count; $i++) {
+			$arrayExistFileName[] = $doc['versions'][$i]['FileName'];
+		}
+		return $arrayExistFileName;
 	}
 	/*Функция скачивания файлов index.json.txt с ошибками*/
 	function downloadWrongJson()
@@ -164,7 +204,7 @@
 		$existed_versionsByFileNames = array();
 		$count = count($doc['versions']);
 		for ($i=0; $i < $count; $i++) {
-			$existed_versionsByFileNames[$doc['versions'][$i]['FileName']] = $doc['versions'];
+			$existed_versionsByFileNames[$doc['versions'][$i]['FileName']] = $doc['versions'][$i];
 		}
 		$new_versions = array();
 		$pdf_file_names = collect_pdf_file_names($doc_folder_name);
@@ -175,10 +215,10 @@
 			{
 				$version = $existed_versionsByFileNames[$pdf_file_name];
 				$version = array(
-					'FileName' => $existed_versionsByFileNames[$pdf_file_name][$i]['FileName'],
+					'FileName' => $existed_versionsByFileNames[$pdf_file_name]['FileName'],
 					'Size' => filesize($filepath),
 					'Md5' => md5_file($filepath),
-					'Date' => $existed_versionsByFileNames[$pdf_file_name][$i]['Date'] );
+					'Date' => $existed_versionsByFileNames[$pdf_file_name]['Date'] );
 				unset($existed_versionsByFileNames[$pdf_file_name]);
 			} else {
 				$version = array(
@@ -233,7 +273,12 @@
 		if (isset($_GET['doc']))
 			require realpath(__DIR__ . '/../assets/document.php');
 	}
-	function getDoclist()
+	function CheckTags(){
+		if (isset($_GET['tag'])) {
+			getDoclist($_GET['tag']);
+		}
+	}
+	function getDoclist($tag)
 	{
 		global $pathDocs, $base_url;
 		$docs_json_txt = file_get_contents("{$pathDocs}index.json");
@@ -243,11 +288,16 @@
 		{
 			$doc_json_txt = file_get_contents("$pathDocs$dname/index.json");
 			$doc = json_decode($doc_json_txt, true);
-			$url = "{$base_url}?doc=$dname";
-			$documents[] = array(
-				'Title'=>$doc['Title']
-				,'url'=>array( 'doc'=>$url ,'detail'=>$url.'&action=detail' )
-			);
+			if (isset($doc['tags'][$tag])) {
+				$url = "{$base_url}?doc={$dname}&tag=$tag";
+				$document = array(
+					'Title'=>$doc['tags'][$tag],
+					'url'=>array( 'doc'=>$url ,'detail'=>$url.'&action=detail' )
+				);
+				if (!in_array($document, $documents)) {
+					$documents[] = $document;
+				}
+			}
 		}
 		header('Access-Control-Allow-Origin: *');
 		header('Access-Control-Allow-Headers: *');
